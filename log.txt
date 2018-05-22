@@ -1,0 +1,38 @@
+5/21
+    - Forked repository, explored using visual studio code, github & github desktop. 
+    - installed dependeicies, checked starting application was running.
+    - What kind of applicaiton is this? Node?
+        - checked node_modules for unfamilar packages
+            - acorn - javascript parser 
+            https://www.npmjs.com/package/acorn
+            - acorn-globals
+            https://www.npmjs.com/package/acorn-globals
+            - expreee = server?
+    - curl test from readme works
+    
+    Initial questions/thoughts
+     - Wish there had been more stuff on api's in school, yikes.
+     - 1M requests/minute... that is a lot, but I guess with a growing company and people using the device
+       all over the world maybe 1M/minute is a low estimate.
+     - Am I dealing with the client or the server with this sample api?
+        - Seems like the client, possible things to look into:
+            * asyinc, threading, load balancing (is that a server or client thing? both?)
+                # Do I need to wait for a result to return before sending the next?
+                # Would I have the application wait because it can only handle so many at a time
+                # How to handle the overflow, where do requests go when waiting in line to be sent?
+     - What is the current capacity?
+     - What happens in a failure?
+     - What would we want to happen in a failure?
+     - How do I create a failure to test for failure cases?
+     - What tools can I use to create that many requests?
+     - How do I generate 1M requests!?
+
+    Google search 'node api load testing'
+    https://www.npmjs.com/package/loadtest
+
+    Seems like a good way to blast it with a lot of requests at once. 
+
+
+
+
+    
