@@ -1,3 +1,21 @@
+Hardware Overview:
+
+  Model Name:	MacBook Pro
+  Model Identifier:	MacBookPro9,2
+  Processor Name:	Intel Core i5
+  Processor Speed:	2.5 GHz
+  Number of Processors:	1
+  Total Number of Cores:	2
+  L2 Cache (per Core):	256 KB
+  L3 Cache:	3 MB
+  Memory:	16 GB
+  Boot ROM Version:	MBP91.00D9.B00
+  SMC Version (system):	2.2f44
+  Serial Number (system):	C02JVEC7DTY3
+  Hardware UUID:	E7D70A68-B376-570D-B0F0-3AFE421384E2
+  Sudden Motion Sensor:
+  State:	Enabled
+
 5/21
     - Forked repository, explored using visual studio code, github & github desktop. 
     - installed dependeicies, checked starting application was running.
@@ -18,7 +36,7 @@
         - Seems like the client, possible things to look into:
             * asyinc, threading, load balancing (is that a server or client thing? both?)
                 # Do I need to wait for a result to return before sending the next?
-                # Would I have the application wait because it can only handle so many at a time
+                # Would I have the application wait because it can only handle so many at a time?
                 # How to handle the overflow, where do requests go when waiting in line to be sent?
      - What is the current capacity?
      - What happens in a failure?
@@ -29,8 +47,92 @@
 
     Google search 'node api load testing'
     https://www.npmjs.com/package/loadtest
+    - Seems like a good way to blast it with a lot of requests at once. 
+    - Added dependency, everything still seems to be working. 
+    $ loadtest [-n requests] [-c concurrency] [-k] URL
+    tried $loadtest -- loadtest not found
+    attempted to install the package, ran into some permissions issues. Thought I had resolved that, but 
+    after adding the dependency recieving the following error when trying to npm install to update the 
+    packages   
+    npm ERR! code E404
+    npm ERR! 404 Not Found: devDependencies@undefined
 
-    Seems like a good way to blast it with a lot of requests at once. 
+    Deciding to move on
+    https://www.netguru.co/blog/load-testing-apache-bench
+    https://httpd.apache.org/docs/2.4/programs/ab.html
+    
+
+Renees-MBP:~ reneegrittner$ ab -n 500 -c 20 http://localhost:3000/api/usage
+
+Requests per second:    218.52 [#/sec] (mean)
+Time per request:       91.526 [ms] (mean)
+Time per request:       4.576 [ms] (mean, across all concurrent requests)
+Transfer rate:          313.69 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.3      0       2
+Processing:     7   90  12.8     88     120
+Waiting:        7   89  12.8     88     118
+Total:          9   90  12.6     88     120
+
+
+
+
+5/22
+    research methods in usages.js, what is expressjs, how is it used. 
+        - Seems like a server routing service, seems similar to ASP.NET with routes and  
+    https://expressjs.com/en/api.html    
+
+    callback functions in node js? Googled 'nodejs async function'
+    https://nemethgergely.com/async-function-best-practices/
+
+    Not sure if there is anything to wait for in this case. Does the application need to wait for 
+    the previous entry to finish before. Learning about promises is a greter than 2 hour task. 
+
+    Clustering? 
+    https://www.npmjs.com/package/cluster
+
+    Arg! npm install issues again. 
+
+    Node is single threading, according to https://www.youtube.com/watch?v=w1IzRF6AkuI I should be able 
+    to use clustering without an npm install
+    https://stackoverflow.com/questions/34868258/how-to-use-node-cluster-module-within-express-generator-app-skeleton
+
+    clustering seems to be functioning, altho it is still taking way more than a minute to 
+    run so many requests.
+
+Concurrency Level:      250
+Time taken for tests:   29.162 seconds
+Complete requests:      100000
+Failed requests:        99964
+   (Connect: 0, Receive: 0, Length: 99964, Exceptions: 0)
+Keep-Alive requests:    100000
+Total transferred:      22255180 bytes
+Total body sent:        28200000
+HTML transferred:       1155576 bytes
+Requests per second:    3429.16 [#/sec] (mean)
+Time per request:       72.904 [ms] (mean)
+Time per request:       0.292 [ms] (mean, across all concurrent requests)
+Transfer rate:          745.28 [Kbytes/sec] received
+                        944.36 kb/s sent
+                        1689.64 kb/s total
+
+    At the end of 2 hours (plus a little to just get a sense of nodejs):
+        - Got to 3429.16 requests/second. Far from the requested 16,000
+        - Possible limiting factors:
+            - using an array instead of an actual database
+            - possible limitations of my physical computer (see hardware specs at top), I read about some ways to change some
+              settings to increase performance but I am unwilling to make those edits without fully
+              understanding what I am changing.  (socket: Too many open files (24) error with -c above 250)
+            - limited working knoweldge of nodejs
+            - difficulties attempting to install packages that may have helped performance. 
+        - use of NGINX  ( https://www.youtube.com/watch?v=2X4ZO5tO7Co) for load balancing?
+        - Future research:
+            https://www.youtube.com/watch?v=f5phsX4VUOU
+            https://www.youtube.com/watch?v=Ogjb60Fg10A
+
+
 
 
 
